@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar.dart';
+import 'package:provider/provider.dart';
+import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -11,6 +13,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SidebarViewModel viewmodel = Provider.of(context);
+      viewmodel.init();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
