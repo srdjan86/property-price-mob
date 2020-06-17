@@ -27,6 +27,6 @@ class Contract {
           date: json['date'],
           type: json['type'],
           object: json['object'],
-          properties: json['properties'],
+          properties: PPProperty.fromJSONList(json['properties']),
         );
 }

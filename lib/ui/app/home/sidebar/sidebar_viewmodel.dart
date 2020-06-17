@@ -27,13 +27,11 @@ class SidebarViewModel extends BaseViewModel {
 
   @override
   void init() async {
-    print('selected district $selectedDistrict');
     // TODO: implement init
     districts = await load(getDistrictsUseCase.getAllDistricts());
   }
 
   setSelectedDistrict(String districtValue) {
-    print('districtValue $districtValue');
     selectedDistrict = districtValue;
     notifyListeners();
   }

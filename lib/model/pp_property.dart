@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:property_price_mob/model/pp_location.dart';
 
 class PPProperty {
@@ -24,6 +26,13 @@ class PPProperty {
           landSize: json['landSize'],
           type: json['type'],
           typeFormated: json['typeFormated'],
-          location: json['location'],
+          location: PPLocation.fromJSON(json['location']),
         );
+
+  static List<PPProperty> fromJSONList(json) {
+    print(json);
+    List<PPProperty> properties =
+        List<PPProperty>.from(json.map((i) => PPProperty.fromJSON(i)));
+    return properties;
+  }
 }
