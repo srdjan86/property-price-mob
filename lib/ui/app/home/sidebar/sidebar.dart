@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
+import 'package:property_price_mob/utils/pp_datetime.dart';
 import 'package:provider/provider.dart';
 
 class Sidebar extends StatefulWidget {
-  Sidebar({Key key}) : super(key: key);
+  final Function onTap;
+  Sidebar({Key key, this.onTap}) : super(key: key);
 
   @override
   _SidebarState createState() => _SidebarState();
@@ -37,10 +40,47 @@ class _SidebarState extends State<Sidebar> {
                 value: viewmodel.selectedCadesterDistrict,
                 hint: 'Cadester District',
               ),
+              FlatButton(
+                onPressed: () async {
+                  final date = await _showDatePicker(
+                    initialDate: viewmodel.startDate,
+                  );
+                  if (date != null) {
+                    viewmodel.startDate = date;
+                  }
+                },
+                child: Text(PPDateTime.toEuroString(viewmodel.startDate)),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  final date = await _showDatePicker(
+                    initialDate: viewmodel.endDate,
+                  );
+                  if (date != null) {
+                    viewmodel.endDate = date;
+                  }
+                },
+                child: Text(PPDateTime.toEuroString(viewmodel.endDate)),
+              ),
+              FlatButton(
+                onPressed: () {
+                  widget.onTap(viewmodel.startDate, viewmodel.endDate);
+                },
+                child: Text('GET'),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<DateTime> _showDatePicker({DateTime initialDate}) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(2012, 1),
+        lastDate: DateTime.now());
+    return picked;
   }
 }
