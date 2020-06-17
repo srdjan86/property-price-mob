@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/ui/app/home/pp_map/pp_map.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar.dart';
 import 'package:provider/provider.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
@@ -31,9 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(
         child: Sidebar(),
       ),
-      body: Center(
-        child: Text('center'),
-      ),
+      body: PPMap(),
     );
   }
 }
