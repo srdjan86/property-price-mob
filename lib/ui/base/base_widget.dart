@@ -34,7 +34,7 @@ class _BaseWidgetState<T extends BaseViewModel> extends State<BaseWidget<T>> {
     super.initState();
     viewModel = widget.viewModel;
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await viewModel.init();
+      viewModel.init();
       if (widget.onModelReady != null) {
         widget.onModelReady(viewModel);
       }

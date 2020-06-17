@@ -17,7 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SidebarViewModel viewmodel = Provider.of(context);
+      SidebarViewModel viewmodel = Provider.of(context, listen: false);
       viewmodel.init();
     });
     super.initState();
