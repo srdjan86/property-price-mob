@@ -8,8 +8,11 @@ class SidebarViewModel extends BaseViewModel {
   List<District> cadasterDistricts = new List<District>();
   String selectedDistrict;
   String selectedCadesterDistrict;
-  DateTime _startDate = DateTime(DateTime.now().year, DateTime.now().month);
-  DateTime _endDate = DateTime.now();
+  //Commented for testing
+  // DateTime _startDate = DateTime(DateTime.now().year, DateTime.now().month);
+  // DateTime _endDate = DateTime.now();
+  DateTime _startDate = DateTime.parse('2020-01-01');
+  DateTime _endDate = DateTime.parse('2020-01-10');
 
   SidebarViewModel(this.getDistrictsUseCase);
 

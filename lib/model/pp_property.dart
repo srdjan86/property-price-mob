@@ -30,7 +30,6 @@ class PPProperty {
         );
 
   static List<PPProperty> fromJSONList(json) {
-    print(json);
     List<PPProperty> properties =
         List<PPProperty>.from(json.map((i) => PPProperty.fromJSON(i)));
     return properties;
