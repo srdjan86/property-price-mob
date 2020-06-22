@@ -1,16 +1,22 @@
+import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
+import 'package:property_price_mob/usecase/contract/get_contracts_use_case.dart';
 import 'package:property_price_mob/usecase/district/get_districts_use_case.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
-List<SingleChildCloneableWidget> independentProviders = [
-  Provider.value(value: GetDistrictsUseCase())
+List<SingleChildWidget> independentProviders = [
+  Provider<GetDistrictsUseCase>.value(value: GetDistrictsUseCase()),
+  Provider<GetContractsUseCase>.value(value: GetContractsUseCase()),
 ];
 
-List<SingleChildCloneableWidget> dependentProviders = [
+List<SingleChildWidget> dependentProviders = [
   ChangeNotifierProxyProvider<GetDistrictsUseCase, SidebarViewModel>(
-      create: (context) {
-        print('create viewmodel');
-        return SidebarViewModel(GetDistrictsUseCase());
-      },
-      update: (_, getDistrictUseCase, instance) => instance)
+    create: (context) => SidebarViewModel(GetDistrictsUseCase()),
+    update: (_, getDistrictUseCase, instance) => instance,
+  ),
+  ChangeNotifierProxyProvider<GetContractsUseCase, HomeViewModel>(
+    create: (context) => HomeViewModel(GetContractsUseCase()),
+    update: (_, getContractsUseCase, instance) => instance,
+  ),
 ];

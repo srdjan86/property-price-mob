@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/pp_map/pp_map.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SidebarViewModel viewmodel = Provider.of(context);
+      SidebarViewModel viewmodel = Provider.of(context, listen: false);
       viewmodel.init();
     });
     super.initState();
@@ -25,12 +26,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    HomeViewModel viewmodel = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       drawer: Drawer(
-        child: Sidebar(),
+        child: Sidebar(onTap: viewmodel.getContracts),
       ),
       body: PPMap(),
     );
