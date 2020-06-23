@@ -17,6 +17,7 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
   Animation<Offset> position;
   Animation<double> opacity;
   bool visible = false;
+  List<Contract> contracts;
 
   final alphaTween = new Tween(begin: 0.0, end: 1.0);
   // List<Contract> contracts;
@@ -36,30 +37,31 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
       child: SlideTransition(
         position: position,
         child: Container(
-            height: 150,
-            // width: MediaQuery.of(context).size.width - 40,
-            color: Colors.green,
-            child: widget.contracts != null
-                ? ListView.separated(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    separatorBuilder: (context, i) => SizedBox(
-                      width: 10,
-                    ),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: widget.contracts.length,
-                    itemBuilder: (context, index) => PPMapPopupItem(
-                      contract: widget.contracts[index],
-                    ),
-                  )
-                : Container()),
+          height: 150,
+          // width: MediaQuery.of(context).size.width - 40,
+          // color: Colors.green,
+          child: contracts != null
+              ? ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  separatorBuilder: (context, i) => SizedBox(
+                    width: 10,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: contracts.length,
+                  itemBuilder: (context, index) => PPMapPopupItem(
+                    contract: contracts[index],
+                  ),
+                )
+              : Container(),
+        ),
       ),
     );
   }
 
   void _startAnimation() {
     controller = AnimationController(
-        duration: const Duration(milliseconds: 400), vsync: this);
+        duration: const Duration(milliseconds: 250), vsync: this);
 
     position = new Tween<Offset>(
       begin: new Offset(0.0, 1.0),
@@ -80,16 +82,22 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
 
   @override
   void didUpdateWidget(PPMapPopup oldWidget) {
-    print('didUpdateWidget');
+    if (widget.contracts != null) {
+      setState(() {
+        contracts = widget.contracts;
+      });
+    }
+    print('visible $visible');
     // if (!visible)
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     HomeViewModel homeViewModel = Provider.of(context, listen: false);
     print(homeViewModel.selectedMarkerId);
     if (visible && homeViewModel.selectedMarkerId == null) {
+      controller.reverse();
+      print('entered');
       setState(() {
         visible = false;
       });
-      controller.reverse();
     } else if (!visible && homeViewModel.selectedMarkerId != null) {
       setState(() {
         visible = true;
