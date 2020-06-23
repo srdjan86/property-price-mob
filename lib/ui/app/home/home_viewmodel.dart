@@ -11,7 +11,16 @@ class HomeViewModel extends BaseViewModel {
   HomeViewModel(this._getContractsUseCase);
 
   List<Contract> contracts = List<Contract>();
+  Map<String, PPMarker> markersMap = new Map();
   List<PPMarker> markers = List<PPMarker>();
+
+  String _selectedMarkerId;
+
+  String get selectedMarkerId => _selectedMarkerId;
+  set selectedMarkerId(String value) {
+    _selectedMarkerId = value;
+    forceNotify();
+  }
 
   void getContracts(DateTime startDate, DateTime endDate) async {
     final result = await _getContractsUseCase.getContracts(startDate, endDate);
@@ -23,33 +32,33 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void createLocations() {
-    Map<String, PPMarker> map = new Map();
+    markersMap = new Map();
     for (var contract in contracts) {
       for (var property in contract.properties) {
         final key = property.location.lat.toString() +
             '-' +
             property.location.lon.toString();
-        if (map[key] == null) {
-          map[key] = PPMarker(
+        if (markersMap[key] == null) {
+          markersMap[key] = PPMarker(
+            id: key,
             contracts: [contract],
             point: LatLng(property.location.lat, property.location.lon),
-            builder: (ctx) => Image.asset(
-              'assets/images/residence-512.png',
-              height: 10,
-              width: 10,
-            ),
+            onTap: () {
+              selectedMarkerId = key;
+              forceNotify();
+            },
           );
         } else {
-          if ((map[key].contracts.singleWhere((c) => c.id == contract.id,
+          if ((markersMap[key].contracts.singleWhere((c) => c.id == contract.id,
                   orElse: () => null)) !=
               null) {
           } else {
-            map[key].contracts.add(contract);
+            markersMap[key].contracts.add(contract);
           }
         }
       }
     }
-    map.forEach((k, v) => markers.add(v));
+    markersMap.forEach((k, v) => markers.add(v));
     forceNotify();
   }
 

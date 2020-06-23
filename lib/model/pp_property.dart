@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:property_price_mob/model/pp_location.dart';
 
 class PPProperty {
