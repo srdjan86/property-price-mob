@@ -37,12 +37,11 @@ class _PPMapState extends State<PPMap> {
           )
         ],
       ),
-      homeViewmodel.selectedMarkerId != null
-          ? PPMapPopup(
-              contracts: homeViewmodel
-                  .markersMap[homeViewmodel.selectedMarkerId].contracts,
-            )
-          : Container()
+      PPMapPopup(
+        contracts: homeViewmodel.selectedMarkerId != null
+            ? homeViewmodel.markersMap[homeViewmodel.selectedMarkerId].contracts
+            : null,
+      )
     ]);
   }
 }

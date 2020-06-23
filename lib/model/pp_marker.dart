@@ -24,7 +24,6 @@ class PPMarker extends Marker {
             point: point,
             builder: (context) {
               HomeViewModel homeViewmodel = Provider.of(context);
-              print('create marker');
               return GestureDetector(
                 onTap: onTap,
                 child: Image.asset(
