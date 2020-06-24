@@ -30,6 +30,4 @@ abstract class BaseViewModel extends ChangeNotifier {
   }
 
   forceNotify() => this.notifyListeners();
-
-  void init();
 }

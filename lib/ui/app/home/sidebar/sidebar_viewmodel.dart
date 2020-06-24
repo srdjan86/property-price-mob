@@ -28,9 +28,7 @@ class SidebarViewModel extends BaseViewModel {
     forceNotify();
   }
 
-  @override
   void init() async {
-    // TODO: implement init
     districts = await load(getDistrictsUseCase.getAllDistricts());
   }
 
