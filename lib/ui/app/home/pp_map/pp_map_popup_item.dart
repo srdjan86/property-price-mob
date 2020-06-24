@@ -7,11 +7,12 @@ class PPMapPopupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('pp map popup item build');
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: Colors.blue,
+        color: Colors.white,
       ),
       width: MediaQuery.of(context).size.width - 50,
       child: SingleChildScrollView(
@@ -21,7 +22,15 @@ class PPMapPopupItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('price ${contract.price} ${contract.priceCurrency}'),
+              Text(
+                '${contract.price} ${contract.priceCurrency}',
+                style: TextStyle(
+                  backgroundColor: Colors.blue,
+                  color: Colors.white,
+                  // height: 2,
+                  fontSize: 18,
+                ),
+              ),
               Text('date ${contract.date}'),
               Text(contract.object),
               Flexible(

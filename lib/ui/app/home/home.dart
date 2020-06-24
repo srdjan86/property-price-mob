@@ -26,15 +26,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('home build');
     HomeViewModel viewmodel = Provider.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return Stack(children: [
+      Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        drawer: Drawer(
+          child: Sidebar(onTap: viewmodel.getContracts),
+        ),
+        body: PPMap(),
       ),
-      drawer: Drawer(
-        child: Sidebar(onTap: viewmodel.getContracts),
-      ),
-      body: PPMap(),
-    );
+      viewmodel.busy
+          ? Container(
+              color: Colors.black.withOpacity(0.6),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ))
+          : Container()
+    ]);
   }
 }

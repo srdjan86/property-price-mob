@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_price_mob/model/contract.dart';
-import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/pp_map/pp_map_popup_item.dart';
+import 'package:property_price_mob/ui/app/home/pp_map/pp_map_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class PPMapPopup extends StatefulWidget {
@@ -24,36 +24,36 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // contracts = widget.contracts;
-    _startAnimation(); // TODO: implement initState
+    _startAnimation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('build $contracts');
+    print('pp map popup build');
     return Align(
       alignment: Alignment.bottomCenter,
       child: SlideTransition(
         position: position,
-        child: Container(
-          height: 150,
-          // width: MediaQuery.of(context).size.width - 40,
-          // color: Colors.green,
-          child: contracts != null
-              ? ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  separatorBuilder: (context, i) => SizedBox(
-                    width: 10,
-                  ),
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: contracts.length,
-                  itemBuilder: (context, index) => PPMapPopupItem(
-                    contract: contracts[index],
-                  ),
-                )
-              : Container(),
+        child: FadeTransition(
+          opacity: opacity,
+          child: Container(
+            height: 150,
+            child: contracts != null
+                ? ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    separatorBuilder: (context, i) => SizedBox(
+                      width: 10,
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: contracts.length,
+                    itemBuilder: (context, index) => PPMapPopupItem(
+                      contract: contracts[index],
+                    ),
+                  )
+                : Container(),
+          ),
         ),
       ),
     );
@@ -70,8 +70,6 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
         new CurvedAnimation(parent: controller, curve: Curves.decelerate));
 
     opacity = alphaTween.animate(controller);
-
-    // controller.forward();
   }
 
   @override
@@ -87,34 +85,19 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
         contracts = widget.contracts;
       });
     }
-    print('visible $visible');
-    // if (!visible)
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    HomeViewModel homeViewModel = Provider.of(context, listen: false);
-    print(homeViewModel.selectedMarkerId);
-    if (visible && homeViewModel.selectedMarkerId == null) {
+    PPMapViewModel mapViewModel = Provider.of(context, listen: false);
+    if (visible && mapViewModel.selectedMarkerId == null) {
       controller.reverse();
-      print('entered');
       setState(() {
         visible = false;
       });
-    } else if (!visible && homeViewModel.selectedMarkerId != null) {
+    } else if (!visible && mapViewModel.selectedMarkerId != null) {
       setState(() {
         visible = true;
       });
       controller.forward();
     }
-    //   if (homeViewModel.selectedMarkerId == null) {
-    //     controller.reverse();
-    //   }
-    // });
 
     super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void didChangeDependencies() {
-    print('did change dependencies'); // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
   }
 }

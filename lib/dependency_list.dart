@@ -1,4 +1,5 @@
 import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
+import 'package:property_price_mob/ui/app/home/pp_map/pp_map_viewmodel.dart';
 import 'package:property_price_mob/usecase/contract/get_contracts_use_case.dart';
 import 'package:property_price_mob/usecase/district/get_districts_use_case.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
@@ -17,6 +18,10 @@ List<SingleChildWidget> dependentProviders = [
   ),
   ChangeNotifierProxyProvider<GetContractsUseCase, HomeViewModel>(
     create: (context) => HomeViewModel(GetContractsUseCase()),
+    update: (_, getContractsUseCase, instance) => instance,
+  ),
+  ChangeNotifierProxyProvider<GetContractsUseCase, PPMapViewModel>(
+    create: (context) => PPMapViewModel(),
     update: (_, getContractsUseCase, instance) => instance,
   ),
 ];
