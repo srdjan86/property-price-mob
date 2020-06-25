@@ -6,9 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -24,19 +22,34 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     print('home build');
     HomeViewModel viewmodel = Provider.of(context);
     return Stack(children: [
       Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
+        key: _drawerKey,
         drawer: Drawer(
           child: Sidebar(onTap: viewmodel.getContracts),
         ),
-        body: PPMap(),
+        body: Stack(
+          children: [
+            PPMap(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FloatingActionButton(
+                onPressed: () => _drawerKey.currentState.openDrawer(),
+                child: Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
       viewmodel.busy
           ? Container(

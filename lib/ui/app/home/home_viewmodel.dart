@@ -7,7 +7,7 @@ class HomeViewModel extends BaseViewModel {
 
   HomeViewModel(this._getContractsUseCase);
 
-  List<Contract> contracts = List<Contract>();
+  List<Contract> contracts;
 
   Future<bool> getContracts(DateTime startDate, DateTime endDate) async {
     final result =

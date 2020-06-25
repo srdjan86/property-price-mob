@@ -74,11 +74,15 @@ class _PPMapState extends State<PPMap> {
 
   @override
   void didUpdateWidget(PPMap oldWidget) {
-    PPMapViewModel viewmodel = Provider.of(context);
     HomeViewModel homeViewmodel = Provider.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      viewmodel.createLocations(homeViewmodel.contracts);
-    });
+    if (homeViewmodel.contracts != null) {
+      PPMapViewModel viewmodel = Provider.of(context);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        viewmodel.selectedMarkerId = null;
+        viewmodel.createLocations(homeViewmodel.contracts);
+      });
+    }
 
     super.didUpdateWidget(oldWidget);
   }

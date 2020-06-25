@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
 import 'package:property_price_mob/utils/pp_datetime.dart';
@@ -46,6 +45,9 @@ class _SidebarState extends State<Sidebar> {
                   );
                   if (date != null) {
                     viewmodel.startDate = date;
+                    if (date.isAfter(viewmodel.endDate)) {
+                      viewmodel.endDate = date;
+                    }
                   }
                 },
                 child: Text(PPDateTime.toEuroString(viewmodel.startDate)),
@@ -57,6 +59,9 @@ class _SidebarState extends State<Sidebar> {
                   );
                   if (date != null) {
                     viewmodel.endDate = date;
+                    if (date.isBefore(viewmodel.startDate)) {
+                      viewmodel.startDate = date;
+                    }
                   }
                 },
                 child: Text(PPDateTime.toEuroString(viewmodel.endDate)),
