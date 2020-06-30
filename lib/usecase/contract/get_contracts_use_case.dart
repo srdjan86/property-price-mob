@@ -1,21 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:property_price_mob/model/contract.dart';
 import 'package:property_price_mob/model/data_result.dart';
+import 'package:property_price_mob/model/get_contracts_request.dart';
 import 'package:property_price_mob/usecase/dio.dart';
 import 'package:property_price_mob/utils/contants/api.dart';
-import 'package:property_price_mob/utils/pp_datetime.dart';
 
 class GetContractsUseCase {
   Dio dio = CustomDio().instance.dio;
 
   Future<DataResult<List<Contract>>> getContracts(
-      DateTime startDate, DateTime endDate) async {
+      GetContractsRequest request) async {
     try {
-      final result = await dio.post(Api.CONTRACTS_ENDPOINT, data: {
-        'dateStart': PPDateTime.toUSString(startDate),
-        'dateEnd': PPDateTime.toUSString(endDate),
-      });
-
+      print(request.toJson());
+      final result = await dio
+          .post(Api.CONTRACTS_ENDPOINT, data: {'filters': request.toJson()});
+      print('getContracts result: $result');
       final contracts = List<Contract>();
       for (var con in result.data['data']) {
         final contract = Contract.fromJson(con);

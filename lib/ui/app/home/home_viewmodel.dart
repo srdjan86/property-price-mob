@@ -1,4 +1,5 @@
 import 'package:property_price_mob/model/contract.dart';
+import 'package:property_price_mob/model/get_contracts_request.dart';
 import 'package:property_price_mob/ui/base/base_viewmodel.dart';
 import 'package:property_price_mob/usecase/contract/get_contracts_use_case.dart';
 
@@ -9,9 +10,8 @@ class HomeViewModel extends BaseViewModel {
 
   List<Contract> contracts;
 
-  Future<bool> getContracts(DateTime startDate, DateTime endDate) async {
-    final result =
-        await load(_getContractsUseCase.getContracts(startDate, endDate));
+  Future<bool> getContracts(GetContractsRequest request) async {
+    final result = await load(_getContractsUseCase.getContracts(request));
     if (!result.isFailure()) {
       contracts = result.data;
       forceNotify();

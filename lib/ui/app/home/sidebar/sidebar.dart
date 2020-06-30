@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
-import 'package:property_price_mob/utils/pp_datetime.dart';
 import 'package:provider/provider.dart';
 
 class Sidebar extends StatefulWidget {
@@ -16,10 +16,11 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     SidebarViewModel viewmodel = Provider.of(context);
+    FocusScopeNode currentFocus = FocusScope.of(context);
     return Container(
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
               PPDropdownButton(
@@ -38,33 +39,94 @@ class _SidebarState extends State<Sidebar> {
                 value: viewmodel.selectedCadesterDistrict,
                 hint: 'Cadester District',
               ),
-              FlatButton(
-                onPressed: () async {
-                  final date = await _showDatePicker(
-                    initialDate: viewmodel.startDate,
-                  );
-                  if (date != null) {
-                    viewmodel.startDate = date;
-                    if (date.isAfter(viewmodel.endDate)) {
-                      viewmodel.endDate = date;
-                    }
-                  }
-                },
-                child: Text(PPDateTime.toEuroString(viewmodel.startDate)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    width: 120,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final date = await _showDatePicker(
+                          initialDate: viewmodel.startDate,
+                        );
+                        if (date != null) {
+                          viewmodel.startDate = date;
+                          if (date.isAfter(viewmodel.endDate)) {
+                            viewmodel.endDate = date;
+                          }
+                        }
+                      },
+                      child: AbsorbPointer(
+                        child: TextField(
+                          readOnly: true,
+                          controller: viewmodel.startDateController,
+                          decoration: InputDecoration(labelText: 'Start date'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 120,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final date = await _showDatePicker(
+                          initialDate: viewmodel.endDate,
+                        );
+                        if (date != null) {
+                          viewmodel.endDate = date;
+                          if (date.isBefore(viewmodel.startDate)) {
+                            viewmodel.startDate = date;
+                          }
+                        }
+                        currentFocus.unfocus();
+                      },
+                      child: AbsorbPointer(
+                        child: TextField(
+                          readOnly: true,
+                          controller: viewmodel.endDateController,
+                          decoration: InputDecoration(labelText: 'End date'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              FlatButton(
-                onPressed: () async {
-                  final date = await _showDatePicker(
-                    initialDate: viewmodel.endDate,
-                  );
-                  if (date != null) {
-                    viewmodel.endDate = date;
-                    if (date.isBefore(viewmodel.startDate)) {
-                      viewmodel.startDate = date;
-                    }
-                  }
-                },
-                child: Text(PPDateTime.toEuroString(viewmodel.endDate)),
+              ListTileTheme(
+                contentPadding: EdgeInsets.all(0),
+                child: ExpansionTile(
+                  backgroundColor: Colors.grey[200],
+                  // leading: Text('Filters'),
+                  title: Text('Filters'),
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: viewmodel.minPriceController,
+                            decoration: InputDecoration(
+                              labelText: 'Min price',
+                              counterText: "",
+                            ),
+                            keyboardType: TextInputType.number,
+                            maxLength: 7,
+                          ),
+                        ),
+                        SizedBox(width: 30),
+                        Expanded(
+                          child: TextField(
+                            controller: viewmodel.maxPriceController,
+                            decoration: InputDecoration(
+                              labelText: 'Max price',
+                              counterText: "",
+                            ),
+                            keyboardType: TextInputType.number,
+                            maxLength: 7,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               FlatButton(
                 onPressed: () {
@@ -89,19 +151,31 @@ class _SidebarState extends State<Sidebar> {
   }
 
   void onGetContracts(SidebarViewModel viewmodel) async {
+    HomeViewModel homeViewmodel = Provider.of(context, listen: false);
+    final scafoldContext = Scaffold.of(context).context;
     Navigator.pop(context);
-    final result = await widget.onTap(viewmodel.startDate, viewmodel.endDate);
+    final request = viewmodel.createFilters();
+    final result = await widget.onTap(request);
     if (result == false) {
-      showDialog(
-        context: context,
-        builder: (context) => SimpleDialog(
-          children: [
-            Center(
-              child: Text('error'),
-            ),
-          ],
-        ),
-      );
+      showNotificationDialog(
+          context: scafoldContext, text: homeViewmodel.error);
+    } else {
+      if (homeViewmodel.contracts.length == 0) {
+        showNotificationDialog(context: scafoldContext, text: 'No result');
+      }
     }
+  }
+
+  void showNotificationDialog({BuildContext context, String text}) {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        children: [
+          Center(
+            child: Text(text),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -77,10 +77,11 @@ class _PPMapState extends State<PPMap> {
     HomeViewModel homeViewmodel = Provider.of(context);
     if (homeViewmodel.contracts != null) {
       PPMapViewModel viewmodel = Provider.of(context);
-
       WidgetsBinding.instance.addPostFrameCallback((_) {
         viewmodel.selectedMarkerId = null;
+        // if (homeViewmodel.contracts.length > 0) {
         viewmodel.createLocations(homeViewmodel.contracts);
+        // }
       });
     }
 
