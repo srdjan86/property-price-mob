@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
 import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
+import 'package:property_price_mob/ui/common/pp_textfield.dart';
 import 'package:provider/provider.dart';
 
 class Sidebar extends StatefulWidget {
@@ -17,125 +18,130 @@ class _SidebarState extends State<Sidebar> {
   Widget build(BuildContext context) {
     SidebarViewModel viewmodel = Provider.of(context);
     FocusScopeNode currentFocus = FocusScope.of(context);
-    return Container(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              PPDropdownButton(
-                items: viewmodel.districts,
-                onChanged: (value) {
-                  viewmodel.setSelectedDistrict(value);
-                },
-                value: viewmodel.selectedDistrict,
-                hint: 'District',
-              ),
-              PPDropdownButton(
-                items: viewmodel.cadasterDistricts,
-                onChanged: (value) {
-                  viewmodel.setSelectedCadesterDistrict(value);
-                },
-                value: viewmodel.selectedCadesterDistrict,
-                hint: 'Cadester District',
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: 120,
-                    child: GestureDetector(
-                      onTap: () async {
-                        final date = await _showDatePicker(
-                          initialDate: viewmodel.startDate,
-                        );
-                        if (date != null) {
-                          viewmodel.startDate = date;
-                          if (date.isAfter(viewmodel.endDate)) {
-                            viewmodel.endDate = date;
-                          }
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            PPDropdownButton(
+              items: viewmodel.districts,
+              onChanged: (value) {
+                viewmodel.setSelectedDistrict(value);
+              },
+              value: viewmodel.selectedDistrict,
+              hint: 'District',
+            ),
+            PPDropdownButton(
+              items: viewmodel.cadasterDistricts,
+              onChanged: (value) {
+                viewmodel.setSelectedCadesterDistrict(value);
+              },
+              value: viewmodel.selectedCadesterDistrict,
+              hint: 'Cadester District',
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  width: 120,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final date = await _showDatePicker(
+                        initialDate: viewmodel.startDate,
+                      );
+                      if (date != null) {
+                        viewmodel.startDate = date;
+                        if (date.isAfter(viewmodel.endDate)) {
+                          viewmodel.endDate = date;
                         }
-                      },
-                      child: AbsorbPointer(
-                        child: TextField(
-                          readOnly: true,
-                          controller: viewmodel.startDateController,
-                          decoration: InputDecoration(labelText: 'Start date'),
-                        ),
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        readOnly: true,
+                        controller: viewmodel.startDateController,
+                        decoration: InputDecoration(labelText: 'Start date'),
                       ),
                     ),
                   ),
-                  Container(
-                    width: 120,
-                    child: GestureDetector(
-                      onTap: () async {
-                        final date = await _showDatePicker(
-                          initialDate: viewmodel.endDate,
-                        );
-                        if (date != null) {
-                          viewmodel.endDate = date;
-                          if (date.isBefore(viewmodel.startDate)) {
-                            viewmodel.startDate = date;
-                          }
+                ),
+                Container(
+                  width: 120,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final date = await _showDatePicker(
+                        initialDate: viewmodel.endDate,
+                      );
+                      if (date != null) {
+                        viewmodel.endDate = date;
+                        if (date.isBefore(viewmodel.startDate)) {
+                          viewmodel.startDate = date;
                         }
-                        currentFocus.unfocus();
-                      },
-                      child: AbsorbPointer(
-                        child: TextField(
-                          readOnly: true,
-                          controller: viewmodel.endDateController,
-                          decoration: InputDecoration(labelText: 'End date'),
-                        ),
+                      }
+                      currentFocus.unfocus();
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        readOnly: true,
+                        controller: viewmodel.endDateController,
+                        decoration: InputDecoration(labelText: 'End date'),
                       ),
                     ),
+                  ),
+                ),
+              ],
+            ),
+            ListTileTheme(
+              contentPadding: EdgeInsets.all(0),
+              child: ExpansionTile(
+                backgroundColor: Colors.grey[200],
+                // leading: Text('Filters'),
+                title: Text('Filters'),
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      PPTextField(
+                        controller: viewmodel.minPriceController,
+                        maxLength: 7,
+                        label: 'Min price',
+                      ),
+                      SizedBox(width: 30),
+                      PPTextField(
+                        controller: viewmodel.maxPriceController,
+                        maxLength: 7,
+                        label: 'Max price',
+                      ),
+                    ],
+                  ),
+                  viewmodel.minSizeController.text.isNotEmpty
+                      ? SizedBox(height: 10)
+                      : Container(),
+                  Row(
+                    children: <Widget>[
+                      PPTextField(
+                        controller: viewmodel.minSizeController,
+                        maxLength: 7,
+                        label: 'Min size',
+                      ),
+                      SizedBox(width: 30),
+                      PPTextField(
+                        controller: viewmodel.maxSizeController,
+                        maxLength: 7,
+                        label: 'Max size',
+                      ),
+                    ],
                   ),
                 ],
               ),
-              ListTileTheme(
-                contentPadding: EdgeInsets.all(0),
-                child: ExpansionTile(
-                  backgroundColor: Colors.grey[200],
-                  // leading: Text('Filters'),
-                  title: Text('Filters'),
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: viewmodel.minPriceController,
-                            decoration: InputDecoration(
-                              labelText: 'Min price',
-                              counterText: "",
-                            ),
-                            keyboardType: TextInputType.number,
-                            maxLength: 7,
-                          ),
-                        ),
-                        SizedBox(width: 30),
-                        Expanded(
-                          child: TextField(
-                            controller: viewmodel.maxPriceController,
-                            decoration: InputDecoration(
-                              labelText: 'Max price',
-                              counterText: "",
-                            ),
-                            keyboardType: TextInputType.number,
-                            maxLength: 7,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  onGetContracts(viewmodel);
-                },
-                child: Text('GET'),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+            FlatButton(
+              onPressed: () {
+                onGetContracts(viewmodel);
+              },
+              child: Text('GET'),
+            ),
+          ],
         ),
       ),
     );

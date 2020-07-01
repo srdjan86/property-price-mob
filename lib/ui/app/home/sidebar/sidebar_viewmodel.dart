@@ -21,11 +21,15 @@ class SidebarViewModel extends BaseViewModel {
   TextEditingController _endDateController;
   TextEditingController _maxPriceController;
   TextEditingController _minPriceController;
+  TextEditingController _maxSizeController;
+  TextEditingController _minSizeController;
 
   TextEditingController get startDateController => _startDateController;
   TextEditingController get endDateController => _endDateController;
   TextEditingController get maxPriceController => _maxPriceController;
   TextEditingController get minPriceController => _minPriceController;
+  TextEditingController get maxSizeController => _maxSizeController;
+  TextEditingController get minSizeController => _minSizeController;
 
   SidebarViewModel(this.getDistrictsUseCase);
 
@@ -51,6 +55,8 @@ class SidebarViewModel extends BaseViewModel {
         TextEditingController(text: PPDateTime.toEuroString(endDate));
     _maxPriceController = TextEditingController();
     _minPriceController = TextEditingController();
+    _maxSizeController = TextEditingController();
+    _minSizeController = TextEditingController();
   }
 
   setSelectedDistrict(String districtValue) {
@@ -82,6 +88,19 @@ class SidebarViewModel extends BaseViewModel {
                 )
               : null);
       request.priceFilter = priceFilter;
+    }
+    if (minSizeController.text.isNotEmpty ||
+        maxSizeController.text.isNotEmpty) {
+      SizeFilter sizeFilter = SizeFilter(
+          min: minSizeController.text.isNotEmpty
+              ? int.parse(minSizeController.text)
+              : null,
+          max: maxSizeController.text.isNotEmpty
+              ? int.parse(
+                  maxSizeController.text,
+                )
+              : null);
+      request.sizeFilter = sizeFilter;
     }
     return request;
   }
