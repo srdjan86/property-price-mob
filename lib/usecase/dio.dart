@@ -8,4 +8,12 @@ class CustomDio {
     }
     return _dio;
   }
+
+  static CustomDio _singleton;
+  CustomDio get instance {
+    if (_singleton == null) {
+      _singleton = CustomDio();
+    }
+    return _singleton;
+  }
 }

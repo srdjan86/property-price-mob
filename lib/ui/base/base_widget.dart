@@ -8,7 +8,6 @@ class BaseWidget<T extends BaseViewModel> extends StatefulWidget {
   final Widget Function(BuildContext context, T model, Widget child) builder;
   final Widget child;
   final Function(T) onModelReady;
-  // final Function(T, BuildContext) navigation;
   final T viewModel;
   final bool enableLoading;
 
@@ -17,7 +16,6 @@ class BaseWidget<T extends BaseViewModel> extends StatefulWidget {
     this.builder,
     this.child,
     this.onModelReady,
-    // this.navigation,
     this.viewModel,
     this.enableLoading = true,
   }) : super(key: key);
@@ -27,23 +25,16 @@ class BaseWidget<T extends BaseViewModel> extends StatefulWidget {
 
 class _BaseWidgetState<T extends BaseViewModel> extends State<BaseWidget<T>> {
   T viewModel;
-  // VoidCallback _navigationListener;
 
   @override
   void initState() {
     super.initState();
     viewModel = widget.viewModel;
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await viewModel.init();
       if (widget.onModelReady != null) {
         widget.onModelReady(viewModel);
       }
     });
-
-    // if (widget.navigation != null) {
-    //   _navigationListener = () => widget.navigation(viewModel, context);
-    //   viewModel.addListener(_navigationListener);
-    // }
   }
 
   @override
@@ -67,7 +58,6 @@ class _BaseWidgetState<T extends BaseViewModel> extends State<BaseWidget<T>> {
 
   @override
   void dispose() {
-    // viewModel.removeListener(_navigationListener);
     super.dispose();
   }
 }
