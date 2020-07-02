@@ -139,7 +139,13 @@ class _SidebarState extends State<Sidebar> {
               onPressed: () {
                 onGetContracts(viewmodel);
               },
-              child: Text('GET'),
+              color: Theme.of(context).primaryColor,
+              child: Text(
+                'Apply',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

@@ -37,15 +37,17 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Stack(
           children: [
             PPMap(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                onPressed: () => _drawerKey.currentState.openDrawer(),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: FloatingActionButton(
+                  onPressed: () => _drawerKey.currentState.openDrawer(),
+                  child: Icon(
+                    Icons.menu,
+                    color: Colors.black,
+                  ),
+                  backgroundColor: Colors.white,
                 ),
-                backgroundColor: Colors.white,
               ),
             ),
           ],
