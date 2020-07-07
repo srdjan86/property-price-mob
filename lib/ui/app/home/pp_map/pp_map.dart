@@ -6,6 +6,7 @@ import 'package:property_price_mob/model/contract.dart';
 import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/pp_map/pp_map_popup.dart';
 import 'package:property_price_mob/ui/app/home/pp_map/pp_map_viewmodel.dart';
+import 'package:property_price_mob/utils/contants/mapbox_fields.dart';
 import 'package:provider/provider.dart';
 
 class PPMap extends StatefulWidget {
@@ -40,8 +41,14 @@ class _PPMapState extends State<PPMap> {
         ),
         layers: [
           TileLayerOptions(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c']),
+            urlTemplate:
+                "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+            additionalOptions: {
+              'accessToken':
+                  'pk.eyJ1IjoidmFuaWxpY2EiLCJhIjoiY2tiY2JpN21zMDBkOTMwb2E3ZXU2dzJ3NiJ9.YpAx8SgVmi6W6N9jkaCYbw',
+              'id': 'mapbox/${viewmodel.mapId}',
+            },
+          ),
           MarkerClusterLayerOptions(
             maxClusterRadius: 30,
             size: Size(40, 40),
@@ -68,7 +75,26 @@ class _PPMapState extends State<PPMap> {
         contracts: viewmodel.selectedMarkerId != null
             ? viewmodel.markersMap[viewmodel.selectedMarkerId].contracts
             : null,
-      )
+      ),
+      Positioned(
+        bottom: 0,
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: FloatingActionButton(
+                child: viewmodel.mapId == MapBoxFields.streetsId
+                    ? Icon(Icons.streetview)
+                    : Icon(Icons.satellite),
+                onPressed: () {
+                  if (viewmodel.mapId == MapBoxFields.streetsId) {
+                    viewmodel.mapId = MapBoxFields.satelliteStreetsId;
+                  } else {
+                    viewmodel.mapId = MapBoxFields.streetsId;
+                  }
+                }),
+          ),
+        ),
+      ),
     ]);
   }
 

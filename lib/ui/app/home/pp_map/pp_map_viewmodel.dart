@@ -4,6 +4,7 @@ import 'package:property_price_mob/model/contract.dart';
 import 'package:property_price_mob/model/pp_marker.dart';
 import 'package:property_price_mob/ui/base/base_viewmodel.dart';
 import 'package:latlong/latlong.dart';
+import 'package:property_price_mob/utils/contants/mapbox_fields.dart';
 
 class PPMapViewModel extends BaseViewModel {
   Map<String, PPMarker> markersMap = new Map();
@@ -11,6 +12,13 @@ class PPMapViewModel extends BaseViewModel {
 
   String _selectedMarkerId;
   MapController controller = new MapController();
+  String _mapId = MapBoxFields.streetsId;
+
+  String get mapId => _mapId;
+  set mapId(String value) {
+    _mapId = value;
+    forceNotify();
+  }
 
   String get selectedMarkerId => _selectedMarkerId;
   set selectedMarkerId(String value) {
