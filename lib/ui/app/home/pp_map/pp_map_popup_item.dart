@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/app_localizations.dart';
 import 'package:property_price_mob/model/contract.dart';
 import 'package:property_price_mob/utils/price_util.dart';
 
@@ -8,8 +9,7 @@ class PPMapPopupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'pp map popup item build, ${contract.properties[0].location.lat} ${contract.properties[0].location.lon}}');
+    print('contract.object ${contract.object}');
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -57,7 +57,7 @@ class PPMapPopupItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(contract.object),
+              Text(AppLocalizations.of(context).translate(contract.object)),
               Flexible(
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
@@ -72,7 +72,7 @@ class PPMapPopupItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Property type: ${contract.properties[ind].type}',
+                              'Property type: ${AppLocalizations.of(context).translate(contract.properties[ind].type)}',
                             ),
                             Row(
                               children: <Widget>[
