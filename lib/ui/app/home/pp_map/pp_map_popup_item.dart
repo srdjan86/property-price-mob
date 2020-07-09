@@ -58,15 +58,17 @@ class PPMapPopupItem extends StatelessWidget {
                 ],
               ),
               Text(contract.object),
-              Flexible(
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: contract.properties.length,
-                  itemBuilder: (context, ind) => Row(
+              SizedBox(height: 10),
+              ListView.builder(
+                padding: EdgeInsets.all(0),
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: contract.properties.length,
+                itemBuilder: (context, ind) => Container(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('$ind. '),
+                      Text('${ind + 1}. '),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +93,7 @@ class PPMapPopupItem extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

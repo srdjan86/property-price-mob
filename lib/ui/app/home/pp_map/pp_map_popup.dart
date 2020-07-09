@@ -31,6 +31,7 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     print('pp map popup build');
+    if (contracts == null) return Container();
     return Align(
       alignment: Alignment.bottomCenter,
       child: SlideTransition(
@@ -38,22 +39,19 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
         child: FadeTransition(
           opacity: opacity,
           child: Container(
-            height: 150,
-            child: contracts != null
-                ? ListView.separated(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    separatorBuilder: (context, i) => SizedBox(
-                      width: 10,
-                    ),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: contracts.length,
-                    itemBuilder: (context, index) => PPMapPopupItem(
-                      contract: contracts[index],
-                    ),
-                  )
-                : Container(),
-          ),
+              height: 150,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                separatorBuilder: (context, i) => SizedBox(
+                  width: 10,
+                ),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: contracts.length,
+                itemBuilder: (context, index) => PPMapPopupItem(
+                  contract: contracts[index],
+                ),
+              )),
         ),
       ),
     );
