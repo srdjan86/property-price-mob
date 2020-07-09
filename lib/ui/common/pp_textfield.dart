@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PPTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -30,6 +31,9 @@ class _PPTextFieldState extends State<PPTextField> {
       width: 120,
       child: Stack(children: [
         TextField(
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
             controller: widget.controller,
             decoration: InputDecoration(
               labelText: widget.label,

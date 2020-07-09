@@ -23,22 +23,22 @@ class _SidebarState extends State<Sidebar> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            PPDropdownButton(
-              items: viewmodel.districts,
-              onChanged: (value) {
-                viewmodel.setSelectedDistrict(value);
-              },
-              value: viewmodel.selectedDistrict,
-              hint: 'District',
-            ),
-            PPDropdownButton(
-              items: viewmodel.cadasterDistricts,
-              onChanged: (value) {
-                viewmodel.setSelectedCadesterDistrict(value);
-              },
-              value: viewmodel.selectedCadesterDistrict,
-              hint: 'Cadester District',
-            ),
+            // PPDropdownButton(
+            //   items: viewmodel.districts,
+            //   onChanged: (value) {
+            //     viewmodel.setSelectedDistrict(value);
+            //   },
+            //   value: viewmodel.selectedDistrict,
+            //   hint: 'District',
+            // ),
+            // PPDropdownButton(
+            //   items: viewmodel.cadasterDistricts,
+            //   onChanged: (value) {
+            //     viewmodel.setSelectedCadesterDistrict(value);
+            //   },
+            //   value: viewmodel.selectedCadesterDistrict,
+            //   hint: 'Cadester District',
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -91,6 +91,7 @@ class _SidebarState extends State<Sidebar> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
             ListTileTheme(
               contentPadding: EdgeInsets.all(0),
               child: ExpansionTile(
@@ -113,9 +114,7 @@ class _SidebarState extends State<Sidebar> {
                       ),
                     ],
                   ),
-                  viewmodel.minSizeController.text.isNotEmpty
-                      ? SizedBox(height: 10)
-                      : Container(),
+                  SizedBox(height: 10),
                   Row(
                     children: <Widget>[
                       PPTextField(
@@ -131,6 +130,7 @@ class _SidebarState extends State<Sidebar> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),

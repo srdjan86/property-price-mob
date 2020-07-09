@@ -21,7 +21,6 @@ class _PPMarkerWidgetState extends State<PPMarkerWidget> {
   Widget build(BuildContext context) {
     PPMapViewModel mapViewmodel = Provider.of(context);
 
-    print('marker rebuild endValue $_endValue');
     return GestureDetector(
       onTap: () {
         widget.onTap();
