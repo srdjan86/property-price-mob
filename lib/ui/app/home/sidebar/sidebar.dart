@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
-import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
 import 'package:property_price_mob/ui/common/pp_textfield.dart';
 import 'package:provider/provider.dart';
 
@@ -95,6 +94,10 @@ class _SidebarState extends State<Sidebar> {
             ListTileTheme(
               contentPadding: EdgeInsets.all(0),
               child: ExpansionTile(
+                initiallyExpanded: viewmodel.expanded,
+                onExpansionChanged: (value) {
+                  viewmodel.expanded = value;
+                },
                 backgroundColor: Colors.grey[200],
                 // leading: Text('Filters'),
                 title: Text('Filters'),

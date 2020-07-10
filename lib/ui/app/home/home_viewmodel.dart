@@ -11,6 +11,8 @@ class HomeViewModel extends BaseViewModel {
   List<Contract> contracts;
 
   Future<bool> getContracts(GetContractsRequest request) async {
+    contracts = List<Contract>();
+    forceNotify();
     final result = await load(_getContractsUseCase.getContracts(request));
     if (!result.isFailure()) {
       contracts = result.data;

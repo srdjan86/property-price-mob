@@ -31,6 +31,14 @@ class SidebarViewModel extends BaseViewModel {
   TextEditingController get maxSizeController => _maxSizeController;
   TextEditingController get minSizeController => _minSizeController;
 
+  bool _expanded = false;
+
+  bool get expanded => _expanded;
+  set expanded(bool value) {
+    _expanded = value;
+    forceNotify();
+  }
+
   SidebarViewModel(this.getDistrictsUseCase);
 
   DateTime get startDate => _startDate;
