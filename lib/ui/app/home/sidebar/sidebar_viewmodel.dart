@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:property_price_mob/model/district.dart';
 import 'package:property_price_mob/model/get_contracts_request.dart';
 import 'package:property_price_mob/ui/base/base_viewmodel.dart';
-import 'package:property_price_mob/usecase/district/get_districts_use_case.dart';
 import 'package:property_price_mob/utils/pp_datetime.dart';
 
 class SidebarViewModel extends BaseViewModel {
-  final GetDistrictsUseCase getDistrictsUseCase;
-  List<District> districts = new List<District>();
-  List<District> cadasterDistricts = new List<District>();
-  String selectedDistrict;
-  String selectedCadesterDistrict;
+  int _selectedPropertyTypeId;
   //Commented for testing
   // DateTime _startDate = DateTime(DateTime.now().year, DateTime.now().month);
   // DateTime _endDate = DateTime.now();
@@ -39,7 +33,7 @@ class SidebarViewModel extends BaseViewModel {
     forceNotify();
   }
 
-  SidebarViewModel(this.getDistrictsUseCase);
+  SidebarViewModel();
 
   DateTime get startDate => _startDate;
   set startDate(DateTime value) {
@@ -56,7 +50,6 @@ class SidebarViewModel extends BaseViewModel {
   }
 
   void init() async {
-    districts = await load(getDistrictsUseCase.getAllDistricts());
     _startDateController =
         TextEditingController(text: PPDateTime.toEuroString(startDate));
     _endDateController =
@@ -67,18 +60,16 @@ class SidebarViewModel extends BaseViewModel {
     _minSizeController = TextEditingController();
   }
 
-  setSelectedDistrict(String districtValue) {
-    selectedDistrict = districtValue;
+  set selectedPropertyTypeId(int id) {
+    _selectedPropertyTypeId = id;
     notifyListeners();
   }
 
-  setSelectedCadesterDistrict(String districtValue) {
-    selectedCadesterDistrict = districtValue;
-    notifyListeners();
-  }
+  int get selectedPropertyTypeId => _selectedPropertyTypeId;
 
   GetContractsRequest createFilters() {
     GetContractsRequest request = GetContractsRequest(
+      propertyTypeId: selectedPropertyTypeId,
       dateFilter: DateFilter(
         min: startDate,
         max: endDate,

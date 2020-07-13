@@ -11,10 +11,8 @@ class GetContractsUseCase {
   Future<DataResult<List<Contract>>> getContracts(
       GetContractsRequest request) async {
     try {
-      print(request.toJson());
-      final result = await dio
-          .post(Api.CONTRACTS_ENDPOINT, data: {'filters': request.toJson()});
-      print('getContracts result: $result');
+      final result =
+          await dio.post(Api.CONTRACTS_ENDPOINT, data: request.toJson());
       final contracts = List<Contract>();
       for (var con in result.data['data']) {
         final contract = Contract.fromJson(con);

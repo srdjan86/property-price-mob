@@ -1,22 +1,30 @@
 import 'package:property_price_mob/utils/pp_datetime.dart';
 
 class GetContractsRequest {
+  final int propertyTypeId;
   final DateFilter dateFilter;
   PriceFilter priceFilter;
   SizeFilter sizeFilter;
 
-  GetContractsRequest({this.dateFilter, this.priceFilter, this.sizeFilter});
+  GetContractsRequest({
+    this.dateFilter,
+    this.priceFilter,
+    this.sizeFilter,
+    this.propertyTypeId,
+  });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = Map<String, dynamic>();
+    map['typeId'] = propertyTypeId;
+    map['filters'] = Map<String, dynamic>();
     if (dateFilter != null) {
-      map[dateFilter.name] = dateFilter.toJson();
+      map['filters'][dateFilter.name] = dateFilter.toJson();
     }
     if (priceFilter != null) {
-      map[priceFilter.name] = priceFilter.toJson();
+      map['filters'][priceFilter.name] = priceFilter.toJson();
     }
     if (sizeFilter != null) {
-      map[sizeFilter.name] = sizeFilter.toJson();
+      map['filters'][sizeFilter.name] = sizeFilter.toJson();
     }
     return map;
   }

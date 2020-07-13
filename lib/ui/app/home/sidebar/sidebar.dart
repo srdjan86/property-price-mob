@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_price_mob/ui/app/home/home_viewmodel.dart';
 import 'package:property_price_mob/ui/app/home/sidebar/sidebar_viewmodel.dart';
+import 'package:property_price_mob/ui/common/pp_dropdown_button.dart';
 import 'package:property_price_mob/ui/common/pp_textfield.dart';
 import 'package:provider/provider.dart';
 
@@ -16,20 +17,21 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     SidebarViewModel viewmodel = Provider.of(context);
+    HomeViewModel homeViewModel = Provider.of(context);
     FocusScopeNode currentFocus = FocusScope.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            // PPDropdownButton(
-            //   items: viewmodel.districts,
-            //   onChanged: (value) {
-            //     viewmodel.setSelectedDistrict(value);
-            //   },
-            //   value: viewmodel.selectedDistrict,
-            //   hint: 'District',
-            // ),
+            PPDropdownButton(
+              items: homeViewModel.propertyTypes,
+              onChanged: (value) {
+                viewmodel.selectedPropertyTypeId = value;
+              },
+              selectedItemId: viewmodel.selectedPropertyTypeId,
+              hint: 'District',
+            ),
             // PPDropdownButton(
             //   items: viewmodel.cadasterDistricts,
             //   onChanged: (value) {
@@ -38,6 +40,7 @@ class _SidebarState extends State<Sidebar> {
             //   value: viewmodel.selectedCadesterDistrict,
             //   hint: 'Cadester District',
             // ),
+            // PPDropdownButton(items: homeViewmodel.propertyTypes),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -59,7 +62,9 @@ class _SidebarState extends State<Sidebar> {
                       child: TextField(
                         readOnly: true,
                         controller: viewmodel.startDateController,
-                        decoration: InputDecoration(labelText: 'Start date'),
+                        decoration: InputDecoration(
+                          labelText: 'Start date',
+                        ),
                       ),
                     ),
                   ),
@@ -83,7 +88,9 @@ class _SidebarState extends State<Sidebar> {
                       child: TextField(
                         readOnly: true,
                         controller: viewmodel.endDateController,
-                        decoration: InputDecoration(labelText: 'End date'),
+                        decoration: InputDecoration(
+                          labelText: 'End date',
+                        ),
                       ),
                     ),
                   ),

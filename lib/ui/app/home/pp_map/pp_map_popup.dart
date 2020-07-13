@@ -30,7 +30,6 @@ class _PPMapPopupState extends State<PPMapPopup> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('pp map popup build');
     if (contracts == null) return Container();
     return Align(
       alignment: Alignment.bottomCenter,

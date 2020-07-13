@@ -16,8 +16,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SidebarViewModel viewmodel = Provider.of(context, listen: false);
-      viewmodel.init();
+      SidebarViewModel sidebarviewmodel = Provider.of(context, listen: false);
+      HomeViewModel viewmodel = Provider.of(context, listen: false);
+      sidebarviewmodel.init();
+      viewmodel.getPropertyTypes();
     });
     super.initState();
   }
@@ -26,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('home build');
     HomeViewModel viewmodel = Provider.of(context);
     return Stack(children: [
       Scaffold(

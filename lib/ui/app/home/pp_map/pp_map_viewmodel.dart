@@ -58,7 +58,6 @@ class PPMapViewModel extends BaseViewModel {
     double minLong = markers.first.point.longitude;
     double maxLat = markers.first.point.latitude;
     double maxLong = markers.first.point.longitude;
-    print(markers.length);
     markers.forEach((marker) {
       marker.contracts.forEach((contract) {
         contract.properties.forEach((property) {

@@ -8,8 +8,6 @@ class PPMapPopupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'pp map popup item build, ${contract.properties[0].location.lat} ${contract.properties[0].location.lon}}');
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(

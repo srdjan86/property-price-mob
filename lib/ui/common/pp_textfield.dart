@@ -19,14 +19,12 @@ class _PPTextFieldState extends State<PPTextField> {
     listener = () {
       setState(() {});
     };
-    print('init state ${widget.controller.text}');
     widget.controller.addListener(listener);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('tf build');
     return Container(
       width: 120,
       child: Stack(children: [
@@ -62,7 +60,6 @@ class _PPTextFieldState extends State<PPTextField> {
 
   @override
   void dispose() {
-    print('dispose');
     widget.controller.removeListener(listener);
     super.dispose();
   }
