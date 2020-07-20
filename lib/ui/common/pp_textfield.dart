@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PPTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -18,18 +19,19 @@ class _PPTextFieldState extends State<PPTextField> {
     listener = () {
       setState(() {});
     };
-    print('init state ${widget.controller.text}');
     widget.controller.addListener(listener);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('tf build');
     return Container(
       width: 120,
       child: Stack(children: [
         TextField(
+            inputFormatters: <TextInputFormatter>[
+              WhitelistingTextInputFormatter.digitsOnly
+            ],
             controller: widget.controller,
             decoration: InputDecoration(
               labelText: widget.label,
@@ -58,7 +60,6 @@ class _PPTextFieldState extends State<PPTextField> {
 
   @override
   void dispose() {
-    print('dispose');
     widget.controller.removeListener(listener);
     super.dispose();
   }

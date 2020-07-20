@@ -1,12 +1,12 @@
 class District {
   final String name;
-  final String value;
+  final int id;
 
-  District({this.name, this.value});
+  District({this.id, this.name});
 
-  static List<District> fromJSON(Map<String, String> items) {
-    List<District> list = new List<District>();
-    items.forEach((f, v) => list.add(District(name: f, value: v)));
-    return list;
-  }
+  District.fromJson(Map<String, dynamic> json)
+      : this(
+          name: json['name'],
+          id: json['id'],
+        );
 }

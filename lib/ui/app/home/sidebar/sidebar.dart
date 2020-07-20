@@ -17,6 +17,7 @@ class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     SidebarViewModel viewmodel = Provider.of(context);
+    HomeViewModel homeViewModel = Provider.of(context);
     FocusScopeNode currentFocus = FocusScope.of(context);
     return SafeArea(
       child: Padding(
@@ -24,21 +25,44 @@ class _SidebarState extends State<Sidebar> {
         child: Column(
           children: <Widget>[
             PPDropdownButton(
-              items: viewmodel.districts,
+              items: homeViewModel.propertyCategories,
               onChanged: (value) {
-                viewmodel.setSelectedDistrict(value);
+                viewmodel.selectedCategory = value;
               },
-              value: viewmodel.selectedDistrict,
+              selectedItemId: viewmodel.selectedCategory,
               hint: 'District',
             ),
             PPDropdownButton(
-              items: viewmodel.cadasterDistricts,
+              items: viewmodel.selectedCategory != null
+                  ? homeViewModel
+                      .propertyCategories[viewmodel.selectedCategory].types
+                  : [],
               onChanged: (value) {
-                viewmodel.setSelectedCadesterDistrict(value);
+                viewmodel.selectedType = value;
               },
-              value: viewmodel.selectedCadesterDistrict,
+              selectedItemId: viewmodel.selectedType,
               hint: 'Cadester District',
             ),
+            PPDropdownButton(
+              items: viewmodel.districts,
+              onChanged: (value) {
+                print('value $value');
+                print(value is int);
+                viewmodel.selectedDistrictId = value;
+                viewmodel.getCadesterDistrict(value);
+              },
+              selectedItemId: viewmodel.selectedDistrictId,
+              hint: 'District',
+            ),
+            PPDropdownButton(
+              items: viewmodel.cadesterDistricts,
+              onChanged: (value) {
+                viewmodel.selectedCadesterDistrictId = value;
+              },
+              selectedItemId: viewmodel.selectedCadesterDistrictId,
+              hint: 'Cadester District',
+            ),
+            // PPDropdownButton(items: homeViewmodel.propertyTypes),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -60,7 +84,9 @@ class _SidebarState extends State<Sidebar> {
                       child: TextField(
                         readOnly: true,
                         controller: viewmodel.startDateController,
-                        decoration: InputDecoration(labelText: 'Start date'),
+                        decoration: InputDecoration(
+                          labelText: 'Start date',
+                        ),
                       ),
                     ),
                   ),
@@ -84,16 +110,23 @@ class _SidebarState extends State<Sidebar> {
                       child: TextField(
                         readOnly: true,
                         controller: viewmodel.endDateController,
-                        decoration: InputDecoration(labelText: 'End date'),
+                        decoration: InputDecoration(
+                          labelText: 'End date',
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 10),
             ListTileTheme(
               contentPadding: EdgeInsets.all(0),
               child: ExpansionTile(
+                initiallyExpanded: viewmodel.expanded,
+                onExpansionChanged: (value) {
+                  viewmodel.expanded = value;
+                },
                 backgroundColor: Colors.grey[200],
                 // leading: Text('Filters'),
                 title: Text('Filters'),
@@ -113,9 +146,7 @@ class _SidebarState extends State<Sidebar> {
                       ),
                     ],
                   ),
-                  viewmodel.minSizeController.text.isNotEmpty
-                      ? SizedBox(height: 10)
-                      : Container(),
+                  SizedBox(height: 10),
                   Row(
                     children: <Widget>[
                       PPTextField(
@@ -131,6 +162,7 @@ class _SidebarState extends State<Sidebar> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -139,7 +171,13 @@ class _SidebarState extends State<Sidebar> {
               onPressed: () {
                 onGetContracts(viewmodel);
               },
-              child: Text('GET'),
+              color: Theme.of(context).primaryColor,
+              child: Text(
+                'Apply',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

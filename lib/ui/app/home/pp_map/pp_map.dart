@@ -19,7 +19,6 @@ class PPMap extends StatefulWidget {
 class _PPMapState extends State<PPMap> {
   @override
   Widget build(BuildContext context) {
-    print('mapbuild');
     PPMapViewModel viewmodel = Provider.of(context);
     return Stack(children: [
       FlutterMap(

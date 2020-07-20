@@ -8,8 +8,6 @@ class PPMapPopupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'pp map popup item build, ${contract.properties[0].location.lat} ${contract.properties[0].location.lon}}');
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -58,15 +56,17 @@ class PPMapPopupItem extends StatelessWidget {
                 ],
               ),
               Text(contract.object),
-              Flexible(
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: contract.properties.length,
-                  itemBuilder: (context, ind) => Row(
+              SizedBox(height: 10),
+              ListView.builder(
+                padding: EdgeInsets.all(0),
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: contract.properties.length,
+                itemBuilder: (context, ind) => Container(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('$ind. '),
+                      Text('${ind + 1}. '),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class PPMapPopupItem extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

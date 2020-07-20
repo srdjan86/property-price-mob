@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:property_price_mob/model/cadesterDistrict.dart';
+import 'package:property_price_mob/model/data_result.dart';
 import 'package:property_price_mob/model/district.dart';
 import 'package:property_price_mob/model/get_contracts_request.dart';
 import 'package:property_price_mob/ui/base/base_viewmodel.dart';
+import 'package:property_price_mob/usecase/district/get_cadester_districts_use_case.dart';
 import 'package:property_price_mob/usecase/district/get_districts_use_case.dart';
 import 'package:property_price_mob/utils/pp_datetime.dart';
 
 class SidebarViewModel extends BaseViewModel {
-  final GetDistrictsUseCase getDistrictsUseCase;
-  List<District> districts = new List<District>();
-  List<District> cadasterDistricts = new List<District>();
-  String selectedDistrict;
-  String selectedCadesterDistrict;
+  int _selectedCategory;
+  int _selectedType;
+  int _selectedDistrictId;
+  int _selectedCadesterDistrictId;
   //Commented for testing
   // DateTime _startDate = DateTime(DateTime.now().year, DateTime.now().month);
   // DateTime _endDate = DateTime.now();
   DateTime _startDate = DateTime.parse('2020-01-01');
   DateTime _endDate = DateTime.parse('2020-01-10');
+
+  final GetDistrictsUseCase _getDistrictsUseCase;
+  final GetCadesterDistrictsUseCase _getCadesterDistrictsUseCase;
+
+  List<District> districts = List<District>();
+  List<CadesterDistrict> cadesterDistricts = List<CadesterDistrict>();
 
   TextEditingController _startDateController;
   TextEditingController _endDateController;
@@ -31,7 +39,16 @@ class SidebarViewModel extends BaseViewModel {
   TextEditingController get maxSizeController => _maxSizeController;
   TextEditingController get minSizeController => _minSizeController;
 
-  SidebarViewModel(this.getDistrictsUseCase);
+  bool _expanded = false;
+
+  bool get expanded => _expanded;
+  set expanded(bool value) {
+    _expanded = value;
+    forceNotify();
+  }
+
+  SidebarViewModel(
+      this._getDistrictsUseCase, this._getCadesterDistrictsUseCase);
 
   DateTime get startDate => _startDate;
   set startDate(DateTime value) {
@@ -48,7 +65,6 @@ class SidebarViewModel extends BaseViewModel {
   }
 
   void init() async {
-    districts = await load(getDistrictsUseCase.getAllDistricts());
     _startDateController =
         TextEditingController(text: PPDateTime.toEuroString(startDate));
     _endDateController =
@@ -57,20 +73,38 @@ class SidebarViewModel extends BaseViewModel {
     _minPriceController = TextEditingController();
     _maxSizeController = TextEditingController();
     _minSizeController = TextEditingController();
+
+    await getDistricts();
   }
 
-  setSelectedDistrict(String districtValue) {
-    selectedDistrict = districtValue;
+  set selectedCategory(int id) {
+    _selectedCategory = id;
     notifyListeners();
   }
 
-  setSelectedCadesterDistrict(String districtValue) {
-    selectedCadesterDistrict = districtValue;
+  int get selectedCategory => _selectedCategory;
+  set selectedType(int id) {
+    _selectedType = id;
     notifyListeners();
+  }
+
+  int get selectedType => _selectedType;
+
+  int get selectedDistrictId => _selectedDistrictId;
+  set selectedDistrictId(int value) {
+    _selectedDistrictId = value;
+    notifyListeners();
+  }
+
+  int get selectedCadesterDistrictId => _selectedCadesterDistrictId;
+  set selectedCadesterDistrictId(int value) {
+    _selectedCadesterDistrictId = value;
+    forceNotify();
   }
 
   GetContractsRequest createFilters() {
     GetContractsRequest request = GetContractsRequest(
+      propertyTypeId: selectedType,
       dateFilter: DateFilter(
         min: startDate,
         max: endDate,
@@ -103,5 +137,30 @@ class SidebarViewModel extends BaseViewModel {
       request.sizeFilter = sizeFilter;
     }
     return request;
+  }
+
+  Future<bool> getDistricts() async {
+    DataResult result = await load(_getDistrictsUseCase.getDistricts());
+    if (!result.isFailure()) {
+      districts = result.data;
+      forceNotify();
+      return true;
+    } else {
+      error = 'Error while getting districts.';
+      return false;
+    }
+  }
+
+  Future<bool> getCadesterDistrict(int districtId) async {
+    DataResult result = await load(_getCadesterDistrictsUseCase
+        .getCadesterDistricts(districts[districtId].name));
+    if (!result.isFailure()) {
+      cadesterDistricts = result.data;
+      forceNotify();
+      return true;
+    } else {
+      error = 'Error while getting cadester districts.';
+      return false;
+    }
   }
 }
