@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:property_price_mob/model/property_type.dart';
 
 class PPDropdownButton extends StatelessWidget {
   final int selectedItemId;
   final Function onChanged;
   final String hint;
-  final List<PropertyType> items;
+  final List<dynamic> items;
   const PPDropdownButton(
       {Key key, this.selectedItemId, this.items, this.onChanged, this.hint})
       : super(key: key);
@@ -21,11 +20,12 @@ class PPDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PropertyType selectedItem = items.firstWhere(
+    dynamic selectedItem = items.firstWhere(
       (element) => element.id == selectedItemId,
       orElse: () => null,
     );
     return DropdownButton(
+      isExpanded: true,
       items: _createItems(),
       onChanged: this.onChanged,
       hint: Text(hint),

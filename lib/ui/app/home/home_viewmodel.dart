@@ -14,7 +14,7 @@ class HomeViewModel extends BaseViewModel {
 
   List<Contract> contracts;
 
-  List<PropertyType> propertyTypes = List<PropertyType>();
+  List<PropertyCategory> propertyCategories = List<PropertyCategory>();
 
   Future<bool> getContracts(GetContractsRequest request) async {
     contracts = List<Contract>();
@@ -33,7 +33,7 @@ class HomeViewModel extends BaseViewModel {
   Future<bool> getPropertyTypes() async {
     DataResult result = await load(_getPropertyTypesUseCase.getPropertyTypes());
     if (!result.isFailure()) {
-      propertyTypes = result.data;
+      propertyCategories = result.data;
     } else {
       error = 'An error occurred while getting property types.';
     }

@@ -25,21 +25,43 @@ class _SidebarState extends State<Sidebar> {
         child: Column(
           children: <Widget>[
             PPDropdownButton(
-              items: homeViewModel.propertyTypes,
+              items: homeViewModel.propertyCategories,
               onChanged: (value) {
-                viewmodel.selectedPropertyTypeId = value;
+                viewmodel.selectedCategory = value;
               },
-              selectedItemId: viewmodel.selectedPropertyTypeId,
+              selectedItemId: viewmodel.selectedCategory,
               hint: 'District',
             ),
-            // PPDropdownButton(
-            //   items: viewmodel.cadasterDistricts,
-            //   onChanged: (value) {
-            //     viewmodel.setSelectedCadesterDistrict(value);
-            //   },
-            //   value: viewmodel.selectedCadesterDistrict,
-            //   hint: 'Cadester District',
-            // ),
+            PPDropdownButton(
+              items: viewmodel.selectedCategory != null
+                  ? homeViewModel
+                      .propertyCategories[viewmodel.selectedCategory].types
+                  : [],
+              onChanged: (value) {
+                viewmodel.selectedType = value;
+              },
+              selectedItemId: viewmodel.selectedType,
+              hint: 'Cadester District',
+            ),
+            PPDropdownButton(
+              items: viewmodel.districts,
+              onChanged: (value) {
+                print('value $value');
+                print(value is int);
+                viewmodel.selectedDistrictId = value;
+                viewmodel.getCadesterDistrict(value);
+              },
+              selectedItemId: viewmodel.selectedDistrictId,
+              hint: 'District',
+            ),
+            PPDropdownButton(
+              items: viewmodel.cadesterDistricts,
+              onChanged: (value) {
+                viewmodel.selectedCadesterDistrictId = value;
+              },
+              selectedItemId: viewmodel.selectedCadesterDistrictId,
+              hint: 'Cadester District',
+            ),
             // PPDropdownButton(items: homeViewmodel.propertyTypes),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

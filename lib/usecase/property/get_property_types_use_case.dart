@@ -5,16 +5,18 @@ import 'package:property_price_mob/usecase/dio.dart';
 import 'package:property_price_mob/utils/contants/api.dart';
 
 class GetPropertyTypesUseCase {
-  Future<DataResult<List<PropertyType>>> getPropertyTypes() async {
+  Future<DataResult<List<PropertyCategory>>> getPropertyTypes() async {
     try {
       Dio dio = CustomDio().instance.dio;
-      List<PropertyType> list = List<PropertyType>();
+      List<PropertyCategory> list = List<PropertyCategory>();
       // dio.get(path)
       final result = await dio.get(Api.PROPERTY_TYPES_ENDPOINT);
-      for (var json in result.data['data']) {
-        PropertyType propertyType = PropertyType.fromJson(json);
-        list.add(propertyType);
-      }
+
+      result.data['data'].forEach((json) {
+        json['id'] = list.length;
+        PropertyCategory propertyCategory = PropertyCategory.fromJson(json);
+        list.add(propertyCategory);
+      });
       return DataResult.success(list);
     } catch (e) {
       print(e);
